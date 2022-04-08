@@ -332,6 +332,24 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         emit Deposit(poolId, underlying, amount);
     }
 
+    function endAllStreams(uint16 poolId) 
+        override
+        external
+        poolExists(poolId)
+    {
+        uint112 currentRatio = uint112(IEulerEToken(eTokens[pools[poolId].underlying]).convertUnderlyingToBalance(pools[poolId].scaler));
+        (uint112 recipientsBalance,) = settlePool(poolId, currentRatio);
+
+        require(recipientsBalance >= pools[poolId].eTBalance, "the pool is still solvent");   
+
+        for(uint8 i=0; i<pools[poolId].recipients.length; ++i) {
+            address recipient = pools[poolId].recipients[i];
+            if(streams[poolId][recipient].startTime != streams[poolId][recipient].stopTime) {
+                streams[poolId][recipient].startTime = streams[poolId][recipient].stopTime = uint64(block.timestamp);
+            }
+        }
+    }
+
 
     /*** View Functions ***/
 

@@ -112,4 +112,6 @@ interface IStreamPools {
     function withdraw(uint16 poolId, uint amount) external;
 
     function deposit(uint16 poolId, uint amount) external;
+
+    function endAllStreams(uint16 poolId) external;
 }
