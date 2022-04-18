@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+}
+
+.Lora {
+  font-family: 'Lora', serif;
+}
+
+.Quatt { 
+  font-family: 'Quattrocento Sans', sans-serif;
+}
+
+.StreamPoolsBg {
+  background-color: #ffcd00;
+}
+
+.form-check-input:checked {
+  background-color: #ffcd00 !important;
+  border-color: #ffcd00 !important;
+}
