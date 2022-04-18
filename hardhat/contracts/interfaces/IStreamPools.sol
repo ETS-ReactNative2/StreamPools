@@ -53,7 +53,7 @@ interface IStreamPools {
     );
 
     /**
-     * @notice Emits when a recipient is successfully removed from the pool.
+     * @notice Emits when a recipient is successfully removed from the pool (may happen only if recipients fully withdraws their balance)
      */
     event RecipientRemoved(
         uint16 indexed poolId,
@@ -88,6 +88,9 @@ interface IStreamPools {
      */
     event Withdrawal(uint16 indexed poolId, address indexed underlying, address indexed recipient, uint amount);
 
+    /**
+     * @notice Emits when the pool creator deposits assets to the pool
+     */
     event Deposit(uint16 indexed poolId, address indexed underlying, uint amount);
 
 

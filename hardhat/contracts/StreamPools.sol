@@ -33,17 +33,17 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
     uint16 private nextId;
 
     /**
-     * @notice The pool objects identifiable by ids.
+     * @notice Internal mapping from the pool id to the pool objects
      */
     mapping(uint16 => IStreamPools.Pool) private pools;
 
     /**
-     * @notice Mapping pointing from pool id to recipient to recipient's stream object
+     * @notice Internal mapping pointing from pool id to recipient to recipient's stream object
      */
     mapping(uint16 => mapping(address => Stream)) private streams;
 
     /**
-     * @notice Mapping pointing from pool id to recipient to recipient's stream scheduled update object
+     * @notice Internal mapping pointing from pool id to recipient to recipient's stream scheduled update object
      */
     mapping(uint16 => mapping(address => StreamUpdate)) private updates;
 
@@ -119,8 +119,19 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         nextId++;
 
         emit PoolCreated(poolId, underlying, msg.sender, amount);
+        emit Deposit(poolId, underlying, amount);
     }    
 
+    /**
+     * @notice Adds a new recipient to the previously created pool. Can only be called by pool creator.
+     * @param poolId Id of the pool.
+     * @param recipient Address of the recipient.
+     * @param ratePerSecond Rate per second flowing to the recipient in underlying units.
+     * @param startTime Timestamp when the stream starts.
+     * @param stopTime Timestamp when the stream ends.
+     * @param noticePeriod Number of seconds in advance the stream update must be registered.
+     * @return numberOfRecipients for the pool.
+     */
     function addRecipient(uint16 poolId, address recipient, uint112 ratePerSecond, uint64 startTime, uint64 stopTime, uint64 noticePeriod) 
         override 
         external
@@ -170,6 +181,13 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
                             ratePerSecond, startTime, stopTime, noticePeriod);
     }
 
+    /**
+     * @notice Schedules a new stream update.
+     * @param poolId Id of the pool.
+     * @param recipient Address of the recipient.
+     * @param action Type of the scheduled action as per Constants.sol.
+     * @param parameter Update parameter interpreted regarding scheduled action type.
+     */
     function scheduleUpdate(uint16 poolId, address recipient, uint8 action, uint112 parameter) 
         override
         external 
@@ -206,6 +224,11 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         emit StreamUpdateScheduled(poolId, recipient, action, parameter, updates[poolId][recipient].timestamp);
     }
 
+    /**
+     * @notice Executes previously added update.
+     * @param poolId Id of the pool.
+     * @param recipient Address of the recipient.
+     */
     function executeUpdate(uint16 poolId, address recipient) 
         override 
         external
@@ -238,6 +261,11 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         emit StreamUpdateExecuted(poolId, recipient, update.action, update.parameter, uint64(block.timestamp));
     }
 
+    /**
+     * @notice Withdraws given amount from the pool
+     * @param poolId Id of the pool.
+     * @param amount Amount in the underlying units to be withdrawn. uint256 max for max available amount.
+     */
     function withdraw(uint16 poolId, uint amount) 
         override
         external
@@ -314,6 +342,11 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         emit Withdrawal(poolId, underlying, msg.sender, amount);
     }
 
+    /**
+     * @notice Deposits given amount in the pool
+     * @param poolId Id of the pool.
+     * @param amount Amount in the underlying units to be deposited.
+     */
     function deposit(uint16 poolId, uint amount) 
         override
         external
@@ -337,6 +370,10 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         emit Deposit(poolId, underlying, amount);
     }
 
+    /**
+     * @notice Ends all the streams if the pool insolvent.
+     * @param poolId Id of the pool.
+     */
     function endAllStreams(uint16 poolId) 
         override
         external
@@ -360,6 +397,11 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
 
     /*** View Functions ***/
 
+    /**
+     * @notice Returns given pool.
+     * @param poolId Id of the pool.
+     * @return pool Selected pool.
+     */
     function getPool(uint16 poolId) 
         override 
         external
@@ -374,6 +416,12 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         pool.eTBalance = (pool.eTBalance > recipientsBalance) ? uint112(pool.eTBalance - recipientsBalance) : 0;
     }
 
+    /**
+     * @notice Returns stream assigned to given recipient in a given pool.
+     * @param poolId Id of the pool.
+     * @param recipient Address of the recipient
+     * @return stream Selected stream.
+     */
     function getStream(uint16 poolId, address recipient) 
         override 
         external 
@@ -400,6 +448,12 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         stream.eToURatio = currentRatio;
     }
 
+    /**
+     * @notice Returns stream update object assigned to given recipient in a given pool.
+     * @param poolId Id of the pool.
+     * @param recipient Address of the recipient
+     * @return update Selected update object.
+     */
     function getStreamUpdate(uint16 poolId, address recipient) 
         override 
         external 
@@ -410,6 +464,12 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         require(update.timestamp != 0, "update not scheduled");
     }
     
+    /**
+     * @notice Returns information whether the pool is solvent and for how long it will remain solvent given current conditions.
+     * @param poolId Id of the pool.
+     * @return solvent True if solvent, false otherwise.
+     * @return howLong Number of seconds the pool will remaing solvent given current conditions.
+     */
     function isSolvent(uint16 poolId)
         override
         external
@@ -430,6 +490,12 @@ contract StreamPools is IStreamPools, ReentrancyGuard, Constants {
         }
     }
 
+    /**
+     * @notice Returns balance of a given account in a pool
+     * @param poolId Id of the pool.
+     * @param account Address of the account
+     * @return Current balance in underlying units.
+     */
     function balanceOf(uint16 poolId, address account) 
         override 
         external
