@@ -11,6 +11,7 @@ interface IStreamPools {
         address underlying;
         uint112 eTBalance;
         uint112 scaler;
+        uint8 numberOfRecipients;
     }
 
     struct Stream {
@@ -95,7 +96,7 @@ interface IStreamPools {
     function addRecipient(uint16 poolId, address recipient, uint112 ratePerSecond, uint64 startTime, uint64 stopTime, uint64 noticePeriod) 
         external returns (uint8 numberOfRecipients);
     
-    function scheduleUpdate(uint16 poolId, address recipient, StreamUpdate memory update) external returns (uint64 timeLeft);
+    function scheduleUpdate(uint16 poolId, address recipient, uint8 action, uint112 parameter) external;
 
     function executeUpdate(uint16 poolId, address recipient) external;
 
@@ -105,7 +106,7 @@ interface IStreamPools {
 
     function getStreamUpdate(uint16 poolId, address recipient) external view returns (StreamUpdate memory update);
 
-    function isSolvent(uint16 poolId) external view returns (bool solvent, uint64 howLong);
+    function isSolvent(uint16 poolId) external view returns (bool solvent, uint howLong);
 
     function balanceOf(uint16 poolId, address account) external view returns (uint balance);
     

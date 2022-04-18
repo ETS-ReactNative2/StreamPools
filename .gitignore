@@ -104,6 +104,6 @@ dist
 .tern-port
 
 # Custom
-artifacts/
-cache/
+hardhat/artifacts/
+hardhat/cache/
 package-lock.json

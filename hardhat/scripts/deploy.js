@@ -6,10 +6,10 @@ const EULER_ROPSTEN = '0xfC3DD73e918b931be7DEfd0cc616508391bcc001';
 
 async function main() {
   const StreamPools = await hre.ethers.getContractFactory('StreamPools');
-  const streamPools = await StreamPools.deploy(process.env.IS_ROPSTEN ? EULER_ROPSTEN : EULER_MAINNET);
+  const streamPools = await StreamPools.deploy(process.env.IS_MAINNET ? EULER_MAINNET : EULER_ROPSTEN);
   await streamPools.deployed();
 
-  console.log(`StreamPools contract deployed to ${process.env.IS_ROPSTEN ? 'ROPSTEN' : 'MAINNET'}:`, streamPools.address);
+  console.log(`StreamPools contract deployed to ${process.env.IS_MAINNET ? 'MAINNET' : 'ROPSTEN'}`, streamPools.address);
 }
 
 main()
