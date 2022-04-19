@@ -123,7 +123,7 @@ The smart contract introduces a concept of a `Pool`. `Pool` can be created by an
 
 To reduce the transaction fees, there can be a max of 10 `Streams` connected to a single `Pool`.
 
-As mentioned before, streams can be updated in one of the following manners:
+As mentioned before, streams can be updated in one of the following ways:
 - `RAISE` - `underlyingRatePerSecond` increase
 - `EXTENSION` - `stopTime` increase
 - `CUT` - `underlyingRatePerSecond` decrease
@@ -134,7 +134,24 @@ Recipients can withdraw their funds anytime up to the amount credited to them to
 
 `amount to be withdrawn = initial deposit - total balance already credited to recipients - total rate per second * COOL_OFF_PERIOD`
 
-Each user can check whether the `Pool` is solvent and for how long it will be considering the current asset flow. That information lets the recipient prepare for the fact that the stream may no longer be maintained by the sender and that the `Pool` may eventually run out of funds.
+Each user can check whether the `Pool` is solvent (by calling `isSolvent()` function) and for how long it will stay in that state considering the current asset flow. That information lets the recipient prepare for the fact that the stream may no longer be maintained by the sender and that the `Pool` may eventually run out of funds.
+
+Possible interactions:
+1. New pool creation, call `createPool()`
+2. New stream creation, call `addRecipient()`
+3. Deposit into existing pool, call `deposit()`
+4. Withdraw from the pool/stream, call `withdraw()`
+5. Schedule stream update, call `scheduleUpdate()`
+6. Execute scheduled update, call `executeUpdate()`
+7. Lock the pool state if insolvent, call `endAllStreams()`
+
+State checking:
+1. Get given pool info, call `getPool()`
+2. Get given stream info, call `getStream()`
+3. Get stream update info, call `getStreamUpdate()`
+4. Check account balance, call `balanceOf()`
+5. Check if pool is solvent, call `isSolvent()`
+
 
 ### Front-end
 
