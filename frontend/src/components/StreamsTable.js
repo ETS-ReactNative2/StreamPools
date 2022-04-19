@@ -49,6 +49,7 @@ export default function StreamsTable(props) {
                         <thead>
                             <tr>
                             <th>Pool ID</th>
+                            <th>Sender</th>
                             <th>Balance</th>
                             <th>Rate per Day</th>
                             <th>Underlying</th>
@@ -64,8 +65,9 @@ export default function StreamsTable(props) {
                         <tbody className="align-baseline">
                             {props.streams.map(stream => {
                                 return (
-                                    <tr key={stream.poolId}>
+                                    <tr valign="middle" key={stream.poolId}>
                                         <td>{stream.poolId}</td>
+                                        <td>{`${stream.sender.slice(0,6)}...${stream.sender.slice(-4)}`}</td>
                                         <td>{utils.formatUnits(stream.underlyingBalance, stream.underlyingDecimals)}</td>
                                         <td>{utils.formatUnits(stream.underlyingRatePerSecond.mul(A_DAY), stream.underlyingDecimals)}</td>
                                         <td>{stream.underlyingSymbol}</td>

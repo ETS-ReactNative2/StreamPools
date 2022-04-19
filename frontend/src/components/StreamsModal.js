@@ -82,7 +82,7 @@ export default function StreamsModal(props) {
                         {streams.map(stream => {
                             const key = `${props.pool.id}-${stream.recipient}`;
                             return (
-                                <tr key={key}>
+                                <tr valign="middle" key={key}>
                                     <td>{stream.recipient}</td>
                                     <td>{utils.formatUnits(stream.underlyingBalance, props.pool.underlyingDecimals)}</td>
                                     <td>{utils.formatUnits(stream.underlyingRatePerSecond.mul(A_DAY), props.pool.underlyingDecimals)}</td>

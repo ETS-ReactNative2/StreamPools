@@ -43,7 +43,7 @@ export default function PoolsTable(props) {
                         <tbody className="align-baseline">
                             {props.pools.map(pool => {
                                 return (
-                                    <tr id={pool.id} key={pool.id}>
+                                    <tr valign="middle" id={pool.id} key={pool.id}>
                                         <td>{pool.id}</td>
                                         <td>{utils.formatUnits(pool.underlyingBalance, pool.underlyingDecimals)}</td>
                                         <td>{pool.underlyingSymbol}</td>

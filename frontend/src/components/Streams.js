@@ -101,6 +101,7 @@ export default function Streams() {
                 poolId: id,
                 solvency, 
                 update,
+                sender: pool.sender,
                 underlyingSymbol: result.markets[0].symbol, 
                 underlyingDecimals: result.markets[0].decimals, 
                 underlyingBalance: balance,
