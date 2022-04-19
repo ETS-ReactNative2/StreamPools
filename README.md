@@ -152,10 +152,16 @@ State checking:
 4. Check account balance, call `balanceOf()`
 5. Check if pool is solvent, call `isSolvent()`
 
+![Flowchart simplified](https://github.com/kasperpawlowski/StreamPools/blob/master/public/flowchart.png)
 
 ### Front-end
 
 `Stream Pools` provides a simple website that helps the user to create and manage a `Pool` and `Streams`. The dApp is written in React.js and provides basic functionality for showcase purposes.
+
+![Streams view](https://github.com/kasperpawlowski/StreamPools/blob/master/public/streams.png)
+![Pools view](https://github.com/kasperpawlowski/StreamPools/blob/master/public/pools.png)
+![Streams for a pool](https://github.com/kasperpawlowski/StreamPools/blob/master/public/streams_modal.png)
+![Adding recipient (creating stream)](https://github.com/kasperpawlowski/StreamPools/blob/master/public/add_recipient.png)
 
 ### Project plan
 
