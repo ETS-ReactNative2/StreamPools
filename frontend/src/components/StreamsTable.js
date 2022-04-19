@@ -15,7 +15,7 @@ export default function StreamsTable(props) {
             case 1:
                 updateMessage = 'RAISE to ';
                 updateMessage += utils.formatUnits(stream.update.parameter.mul(A_DAY), stream.underlyingDecimals);
-                updateMessage += ' at ';
+                updateMessage += ' on ';
                 updateMessage += moment(stream.update.timestamp.mul(1000).toNumber()).format("MM/DD/YYYY");
                 break;
             case 2:
@@ -25,11 +25,11 @@ export default function StreamsTable(props) {
             case 3:
                 updateMessage = 'CUT to ';
                 updateMessage += utils.formatUnits(stream.update.parameter.mul(A_DAY), stream.underlyingDecimals);
-                updateMessage += ' at ';
+                updateMessage += ' on ';
                 updateMessage += moment(stream.update.timestamp.mul(1000).toNumber()).format("MM/DD/YYYY");
                 break;
             case 4:
-                updateMessage = 'TERMINATION at ';
+                updateMessage = 'TERMINATION on ';
                 updateMessage += moment(stream.update.parameter.mul(1000).toNumber()).format("MM/DD/YYYY");
                 break;
             default:

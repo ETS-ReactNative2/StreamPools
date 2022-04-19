@@ -88,7 +88,6 @@ export default function Pools() {
             };
             p.push({id: id.toNumber(), ...obj});
         }
-        console.log(p)
         setPools(p);
     }
 
