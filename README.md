@@ -154,6 +154,25 @@ State checking:
 
 ![Flowchart simplified](https://github.com/kasperpawlowski/StreamPools/blob/master/public/flowchart.png)
 
+
+### Yield generation
+
+After the funds are deposited into the Pool and in turn into Euler, the assets begin to accrue an interest rate equal to the interest rate for a given market on Euler. If no Stream was set up, the sender would be generating all the yield for themselves. In this case, depositing into the Pool would be no different from depositing directly into Euler. However, when a Stream is set up, the Stream Pools smart contract begins to generate the yield both for the sender and the recipient. As the interest rate is not stable and changes over time, it is not possible to track its changes. Therefore the process is simplified to registering how much interest the assets accrued between any two points in time and splitting the interest proportionally. Here's the example:
+- a sender deposits 99,000 USDC in the Pool, the Stream is not yet set up
+- the assets sit in the Pool and earn interest exclusively for the sender until a recipient is added
+- a recipient is added when the initial deposit earned 1,000 USDC in interest already, hence the balance at the moment of creating the Stream is 100,000 USDC
+- the recipient is streamed 0.003858 USDC per second which is 10,000 USDC per month
+- after 10 months the recipient should be entitled to withdraw 100,000 USDC + interest (if any)
+- it appears that during those 10 months 10,000 USDC of interest was earned in total
+- as we know that the asset flow was linear at the constant rate, we can easily deduct that half of the interest should be granted to the recipient and the other half to the sender
+- now the sender has 5,000 USDC and the recipient has 105,000 USDC
+- depending on how the stream was configured, the sender may withdraw the outstanding 5,000 USDC or let the stream flow to the recipient for another 0.5 month
+- if we checked the pool after 5 months instead of 10 (assuming that the conditions don't change), the recipient would be entitled to withdraw 50,000 USDC + interest 
+- let's say that there would be 2,500 USDC interest to share, earned on top of the streamed 50,000 USDC and another 2,500 USDC earned on top of the remaining 50,000 USDC
+- having that in mind, if the stream was terminated after five months, the recipient would be entitled to the half of the interest earned on the streamed amount and the sender to the other half of it
+- hence the recipient would receive 51,250 USDC and the sender's balance would be 53,750 USDC
+
+
 ### Front-end
 
 `Stream Pools` provides a simple website that helps the user to create and manage a `Pool` and `Streams`. The dApp is written in React.js and provides basic functionality for showcase purposes.
